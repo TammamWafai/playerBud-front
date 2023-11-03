@@ -9,6 +9,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
+import Map from "./Map";
 
 const URL = "http://localhost:8000/api/v1/";
 
@@ -65,6 +66,7 @@ function MainPage() {
                       Sport Type: {activity.sportType}
                     </Text>
                   </Box>
+                  <Map location={activity.location} />
                   <Text
                     mt="2"
                     fontSize="xl"
