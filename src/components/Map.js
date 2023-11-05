@@ -16,7 +16,7 @@ class Map extends Component {
   }
 
   loadGoogleMaps() {
-    const googleMapsKey = "AIzaSyBBtBpFcJzTP6jzChDcHOe0S-T7yoQcxxI"; // Replace with your API key
+    const googleMapsKey = process.env.REACT_APP_GMAPS_KEY; // Replace with your API key
     const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${googleMapsKey}`;
     script.defer = true;

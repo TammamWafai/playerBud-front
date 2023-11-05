@@ -9,13 +9,12 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
-import Map from "./Map";
+// import Map from "./Map";
 import { Link } from "react-router-dom";
 
 const URL = "http://localhost:8000/api/v1/";
 
 function MainPage() {
-
   const [activities, setActivities] = useState([]);
   const [error, setError] = useState(null);
 
@@ -54,11 +53,8 @@ function MainPage() {
         <Center>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
             {activities.map((activity) => (
-              <Link to={`/activity/${activity._id}`}>
-
-
+              <Link key={activity._id} to={`/activity/${activity._id}`}>
                 <Box
-                  key={activity._id}
                   maxW="sm"
                   borderWidth="1px"
                   rounded="lg"
@@ -70,7 +66,7 @@ function MainPage() {
                         Sport Type: {activity.sportType}
                       </Text>
                     </Box>
-                    <Map location={activity.location} />
+                    {/* <Map location={activity.location} /> */}
                     <Text
                       mt="2"
                       fontSize="xl"
