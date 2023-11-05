@@ -10,10 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
 import Map from "./Map";
+import { Link } from "react-router-dom";
 
 const URL = "http://localhost:8000/api/v1/";
 
 function MainPage() {
+
   const [activities, setActivities] = useState([]);
   const [error, setError] = useState(null);
 
@@ -21,7 +23,6 @@ function MainPage() {
     async function fetchData() {
       try {
         const response = await getAllData(URL);
-        console.log(response.activities);
         setActivities(response.activities);
       } catch (error) {
         setError(error);
@@ -53,40 +54,44 @@ function MainPage() {
         <Center>
           <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={6}>
             {activities.map((activity) => (
-              <Box
-                key={activity._id}
-                maxW="sm"
-                borderWidth="1px"
-                rounded="lg"
-                overflow="hidden"
-              >
-                <Box p="6">
-                  <Box d="flex" alignItems="baseline">
-                    <Text fontSize="sm" color="gray.500">
-                      Sport Type: {activity.sportType}
+              <Link to={`/activity/${activity._id}`}>
+
+
+                <Box
+                  key={activity._id}
+                  maxW="sm"
+                  borderWidth="1px"
+                  rounded="lg"
+                  overflow="hidden"
+                >
+                  <Box p="6">
+                    <Box d="flex" alignItems="baseline">
+                      <Text fontSize="sm" color="gray.500">
+                        Sport Type: {activity.sportType}
+                      </Text>
+                    </Box>
+                    <Map location={activity.location} />
+                    <Text
+                      mt="2"
+                      fontSize="xl"
+                      fontWeight="semibold"
+                      lineHeight="short"
+                    >
+                      Description: {activity.description}
                     </Text>
+                    <Text mt="2" fontSize="sm" color="gray.500">
+                      Date: {formatDate(activity.date)}
+                    </Text>
+                    <Button
+                      mt={4}
+                      colorScheme="teal"
+                      onClick={() => handleJoinActivity(activity._id)}
+                    >
+                      Join
+                    </Button>
                   </Box>
-                  <Map location={activity.location} />
-                  <Text
-                    mt="2"
-                    fontSize="xl"
-                    fontWeight="semibold"
-                    lineHeight="short"
-                  >
-                    Description: {activity.description}
-                  </Text>
-                  <Text mt="2" fontSize="sm" color="gray.500">
-                    Date: {formatDate(activity.date)}
-                  </Text>
-                  <Button
-                    mt={4}
-                    colorScheme="teal"
-                    onClick={() => handleJoinActivity(activity._id)}
-                  >
-                    Join
-                  </Button>
                 </Box>
-              </Box>
+              </Link>
             ))}
           </SimpleGrid>
         </Center>

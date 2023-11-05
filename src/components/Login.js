@@ -34,13 +34,20 @@ function Login() {
 
       // Check for a successful response with a 200 status code
       if (response.status === 200) {
+        localStorage.setItem("jwtToken", response.data.token);
         setSuccess(true); // Set the success state to true
         // You can set user authentication state or redirect the user here
       }
     } catch (error) {
       if (error.response) {
         // The request was made, but the server responded with an error
-        setError(error.response.data.message); // Customize the error message based on your API response structure
+        if (error.response.status === 401) {
+          setError("Invalid credentials. Please check your email and password.");
+        } else if (error.response.status === 400) {
+          setError("Bad request. Please make sure you've entered valid data.");
+        } else {
+          setError("An error occurred. Please try again later.");
+        }
       } else if (error.request) {
         // The request was made but no response was received
         setError("Network error. Please try again later.");
