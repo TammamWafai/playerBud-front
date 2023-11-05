@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 
 class Map extends Component {
@@ -58,27 +57,48 @@ class Map extends Component {
   };
 
   showDirectionsToLocation(destination) {
-    const directionsService = new window.google.maps.DirectionsService();
-    const directionsDisplay = new window.google.maps.DirectionsRenderer();
+    if (navigator.geolocation) {
+      const geolocationOptions = {
+        enableHighAccuracy: true, // Request high-precision location
+        maximumAge: 0, // Force a fresh location reading
+        timeout: 10000, // Timeout in milliseconds (adjust as needed)
+      };
 
-    const origin = new window.google.maps.LatLng(0, 0);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const origin = new window.google.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
 
-    const request = {
-      origin,
-      destination,
-      travelMode: window.google.maps.TravelMode.DRIVING,
-    };
+          const directionsService = new window.google.maps.DirectionsService();
 
-    directionsService.route(request, (response, status) => {
-      if (status === "OK") {
-        directionsDisplay.setDirections(response);
-        directionsDisplay.setMap(this.mapRef.current);
-      }
-    });
+          const request = {
+            origin,
+            destination,
+            travelMode: window.google.maps.TravelMode.DRIVING,
+          };
+
+          directionsService.route(request, (response, status) => {
+            if (status === "OK") {
+              // Create a new tab to display the directions
+              const directionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin.lat()},${origin.lng()}&destination=${destination.lat()},${destination.lng()}&travelmode=driving`;
+              window.open(directionsUrl, "_blank");
+            }
+          });
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+        },
+        geolocationOptions
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
   }
 
   render() {
-    return <div ref={this.mapRef} style={{ height: "150px", width: "100%" }}></div>;
+    return <div ref={this.mapRef} style={{ height: "150px", width: "90%" }}></div>;
   }
 }
 
